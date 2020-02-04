@@ -22,7 +22,7 @@ type Pokemon struct{
 	HpMax 		int			// hp max
 	Hp 			int 		// actual hp
 	Stage 		int			// Base, stage 1, stage 2 & mega
-	Evolve		string		// Evolve to:
+	Evolve		[2]string	// Evolve [from, to]
 	Type 		int 		// Pokemon element
 	Slot1 		[3]string	// attack & ability [name, damagebase, cost]
 	Slot2 		[3]string 	// attack, ability & empty [name, damagebase, cost]
@@ -30,8 +30,8 @@ type Pokemon struct{
 	Strong 		int			// Strong, damage -30
 	Retreat 	[2]int		// retreat cost
 	Energy 		[]int 		// energy attched
-	Efect1 		int 		// paralisis, sleep & confused
-	Efect2 		int 		// burned & poisoned
+	Status1		int 		// paralisis, sleep & confused
+	Status2		int 		// burned & poisoned
 	Slot 		int			// field position
 }
 

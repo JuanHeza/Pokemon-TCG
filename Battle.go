@@ -78,3 +78,61 @@ func (p *Player) GetHand(){
 		a, b = b, b+5
 	}
 }
+/*
+forums.pokemontcg.com/topic/50237-original-decks-1999-2001/
+
+haymaker
+*	4	Hitmonchan
+*	4	Electabuzz
+*	4	Scyther
+*	4	Plus Power
+*	4	Energy Removal
+*	4	Super Energy Removal
+*	3	Gust of Wind
+*	4	Oak
+*	3	Bill
+*	1	Lass
+*	2	Item Finder
+*	2	Computer Search
+*	4	DCE
+*	9	Fighting Energy
+*	8 	Lighting Energy
+*
+Turbo Rain Dance 
+*	4	Squirtle
+*	4	Blastoise
+*	4	Pokemon Breeder
+*	4	Oak
+*	4	Bill
+*	3	Pokemon Trader
+*	4	Item Finder
+*	4	Computer Search
+*	2	Gust of Wind
+*	3	Goop Gas Attack
+*	2	Plus Power
+*	2	Defender
+*	1	Full Heal
+*	2	Super Energy Removal
+*	17	Water Energy
+*
+Fightmare
+*	3	Hitmonlee
+*	3	Hitmonchan
+*	3	Gastly - Fossil
+*	3	Haunter - Fossil
+*	2	Gengar
+*	2	Mankey
+*	2	Oak
+*	4	Bill
+*	1	Pokemon Trader
+*	4	Energy Removal
+*	2	Computer Search
+*	2	Gust of Wind
+*	2	Scoop Up
+*	2	Plus Power
+*	1	Energy Retrival
+*	3	Super Energy Removal
+*	12	Fighting Energy
+*	9	Psychic Energy
+*
+*/
