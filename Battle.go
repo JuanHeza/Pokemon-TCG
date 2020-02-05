@@ -4,6 +4,9 @@ import(
     "math/rand"
     //"time"
 )
+var(
+	Attaking, Defending *Side
+)
 
 type Player struct{
 	Hand 	[]Card 
@@ -40,10 +43,12 @@ type Card struct{
 func Battle(Pl1 string, Pl2 string){
 	var BattleField Field
 	var Player1, Player2 Player
+	Attaking, Defending = Player1.Side, Player2.Side
 	Player1.Init(Pl1)
 	Player2.Init(Pl2)
 	Player1.Side = BattleField.Player1
 	Player2.Side = BattleField.Player2
+
 }
 
 func (p *Player) Init( Pl string){

@@ -7,6 +7,7 @@ import (
 type Elements int
 
 const(
+	/*
 	Water Elements = iota // Water & Ice			// Blue
 	Nature 				// Bug & Grass			// Green
 	Fire 				// Fire					// Red
@@ -18,6 +19,7 @@ const(
 	Fairy	 			// Fairy				// Pink
 	Colorless 			// Normal & Flying		// White
 	Dragon	 			// Dragon				// Gold
+	*/
 )
 //Pokemon Card Info
 /*
