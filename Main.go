@@ -1,22 +1,25 @@
 package main
+
 //go build && Pokemon_TCG.exe
 
 import (
-    "log"
+	"image"
+	_ "image/png"
+	"log"
+	"os"
+
 	"github.com/faiface/pixel"
 	"github.com/faiface/pixel/pixelgl"
 	"golang.org/x/image/colornames"
-	"image"
-	"os"
-
-	_ "image/png"
 )
 
-func main(){
+func main() {
 	log.Println("Bienvenido al Pokemon TCG")
 	//pixelgl.Run(run)
-	Battle("User", "Larry")
+	//Battle("User", "Larry")
+	Decode("NoCompile/Pokemon.json")
 }
+
 func run() {
 	cfg := pixelgl.WindowConfig{
 		Title:  "Pokemon TCG",
@@ -27,12 +30,12 @@ func run() {
 	if err != nil {
 		panic(err)
 	}
-	pic, err := DrawCard("BasicCard","ColorlessCard")
+	pic, err := DrawCard("BasicCard", "ColorlessCard")
 	if err != nil {
 		panic(err)
 	}
 
-	sprite := pixel.NewSprite(pic, pixel.R(0,0,80,120))
+	sprite := pixel.NewSprite(pic, pixel.R(0, 0, 80, 120))
 
 	win.Clear(colornames.Skyblue)
 

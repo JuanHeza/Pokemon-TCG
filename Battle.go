@@ -1,81 +1,102 @@
 package main
-import(
-    "log"
-    "math/rand"
-    //"time"
-)
-var(
-	Attaking, Defending *Side
+
+import (
+	"log"
+	"math/rand"
+	//"time"
 )
 
-type Player struct{
-	Hand 	[]Card 
-	Deck	[]Card
-	Trash	[]Card
-	Prize	[]Card
-	Side	*Side
+var (
+	//Adversary is a temporal variable, not using
+	Adversary            Player
+	attacking, defending *Side
+)
+
+//Player data struct
+type Player struct {
+	Hand  []Card
+	Deck  []Card
+	Trash []Card
+	Prize []Card
+	side  *Side
 }
 
-type Side struct{
-	Main 	Pokemon
-	Bench1	Pokemon
-	Bench2 	Pokemon
-	Bench3 	Pokemon
-	Bench4 	Pokemon
-	Bench5 	Pokemon
+//Side is the field side of the player
+type Side struct {
+	Main  *CardPokemon
+	Bench [5]*CardPokemon
 }
 
-type Field struct{
+//Field is the total play area, both sides
+type Field struct {
 	Player1 *Side
 	Player2 *Side
 	stadium Card
 }
 
-type Card struct{
-	Name 	string	// title
-	Desc	string	// description
-	Set		string	// card set
-	Number	int		// number in set
-	Kind	string	// pokemon, trainer, energy
-	Stage	string	// in case of pokemon card
+//Card is the struct of a card in the deck
+type Card struct {
+	Name   string // title
+	Desc   string // description
+	Set    string // card set
+	Number int    // number in set
+	Kind   string // pokemon, trainer, energy
+	Stage  string // in case of pokemon card
 }
 
-func Battle(Pl1 string, Pl2 string){
+//lastAttack done results
+type lasAttack struct {
+	Name       string
+	Damage     int
+	StatMove   status
+	StatDamage status
+}
+
+//LastAttack variable
+var LastAttack lasAttack
+
+//Battle funcion, here start the game
+func Battle(Pl1 string, Pl2 string) {
 	var BattleField Field
 	var Player1, Player2 Player
-	Attaking, Defending = Player1.Side, Player2.Side
+	attacking, defending = Player1.side, Player2.side
 	Player1.Init(Pl1)
 	Player2.Init(Pl2)
-	Player1.Side = BattleField.Player1
-	Player2.Side = BattleField.Player2
+	Adversary = Player2
+	Player1.side = BattleField.Player1
+	Player2.side = BattleField.Player2
 
 }
 
-func (p *Player) Init( Pl string){
+//Init is the player initializer in the game
+func (p *Player) Init(Pl string) {
 	p.GetDeck(Pl)
 	p.ShuffleDeck()
 	p.GetHand()
 }
 
-func (p *Player) GetDeck(Pl string){
+//GetDeck search the player in a list and return the respective deck
+func (p *Player) GetDeck(Pl string) {
 	/*
 		READ DATA AND GET THE DECK OF PL
 		p.Deck = that
 	*/
 }
 
-func (p *Player)  ShuffleDeck(){
+//ShuffleDeck ... well shuffle the deck
+func (p *Player) ShuffleDeck() {
 	//Seed := rand.New(rand.NewSource(time.Now().UnixNano()))
 	rand.Shuffle(len(p.Deck), func(i, j int) { p.Deck[i], p.Deck[j] = p.Deck[j], p.Deck[i] })
 }
 
-func (p *Player) GetHand(){
-	var a,b = 0,5
+//GetHand gives a player hand
+func (p *Player) GetHand() {
+	var a, b = 0, 5
 	var pokecard = false
-	for !pokecard{
+	for !pokecard {
 		p.Hand = p.Deck[a:b]
-		for _,x := range p.Hand{
-			if x.Stage == "Basic"{
+		for _, x := range p.Hand {
+			if x.Stage == "Basic" {
 				pokecard = true
 			}
 		}
@@ -83,6 +104,7 @@ func (p *Player) GetHand(){
 		a, b = b, b+5
 	}
 }
+
 /*
 forums.pokemontcg.com/topic/50237-original-decks-1999-2001/
 
@@ -103,7 +125,7 @@ haymaker
 *	9	Fighting Energy
 *	8 	Lighting Energy
 *
-Turbo Rain Dance 
+Turbo Rain Dance
 *	4	Squirtle
 *	4	Blastoise
 *	4	Pokemon Breeder

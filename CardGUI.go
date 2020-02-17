@@ -18,7 +18,10 @@ data		  4, 63, 88, 99 	// 79*37
 weakness	  4,106, 82,115		// 79*10
 line		  5,101, 70,104		// 66* 4
 */
+
+	//CardSize is the frame of the card
 	CardSize				= image.Rect(  0,  0, 71, 99)
+	//Bounds is the map of the card resource sheet
 	Bounds = map[string]image.Rectangle{
 	"StageCard" 			: image.Rect(  5,  5, 76,104), 	//1,1
 	"BasicCard" 			: image.Rect( 80,  5,151,104),	//1,2
@@ -39,6 +42,7 @@ line		  5,101, 70,104		// 66* 4
 	//"FairyCard" 			: image.Rect(  0,  0,  0,  0)	//
 	}
 )
+
 //DrawCard Visor of cards
 func DrawCard(Stage string, Type string)(pixel.Picture, error){
 	file, err := os.Open("Resource/PokemonCard.png")

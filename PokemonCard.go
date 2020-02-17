@@ -1,26 +1,5 @@
 package main
 
-import (
-   
-)
-
-type Elements int
-
-const(
-	/*
-	Water Elements = iota // Water & Ice			// Blue
-	Nature 				// Bug & Grass			// Green
-	Fire 				// Fire					// Red
-	Lightning 			// Electric				// Yellow
-	Psychic 			// Psychic & Ghost		// Purpule
-	Fighting			// Fight, Rock & Ground	// Orange?Brown
-	Darkness 			// Dark & Poison		// Black
-	Metal 				// Steel				// Silver
-	Fairy	 			// Fairy				// Pink
-	Colorless 			// Normal & Flying		// White
-	Dragon	 			// Dragon				// Gold
-	*/
-)
 //Pokemon Card Info
 /*
 type Pokemon struct{
@@ -40,21 +19,48 @@ type Pokemon struct{
 	Art string // image.Image
 }
 */
-type stage struct{
+type stage struct {
 	stage int // basic = 0, stage 1 = 1, stage 2 = 2
-	Prev int // # of the pokemon in the pokedex
+	Prev  int // # of the pokemon in the pokedex
 }
 
-//New create a Pokemon Card
-/* func (PC *Pokemon) New(){
-	fmt.Println("Name:")
-	fmt.Scanf("%s\n",&PC.Nombre)
-	fmt.Println("HP:")
-	fmt.Scanf("%d\n",&PC.HP)
-	fmt.Println("Weakness:")
-	fmt.Scanf("%d\n",&PC.Weakness)
-	fmt.Println("Rarity:")
-	fmt.Scanf("%d\n",&PC.Rarity)
-	fmt.Println("Pokedex:")
-	fmt.Scanf("%d\n",&PC.Pokedex)
-} */
+func newPokemon() *CardPokemon { return nil }
+
+//PickPokemon :)
+func PickPokemon([5]*CardPokemon) *CardPokemon { return nil }
+
+//PickPokemon :)
+func (P *Player) PickPokemon() *CardPokemon { return nil }
+
+//PickEnergy :)
+func PickEnergy(Ec EnergyCost, cant int, Type Element) Element { return typeColorless }
+
+//PickElement :)
+func PickElement() EnergyCost { return EnergyCost{} }
+
+//PickAttack :)
+func PickAttack(*CardPokemon) Attacks { return Attacks{} }
+
+//SwitchPokemon :)
+func SwitchPokemon(in *CardPokemon, out *CardPokemon) {}
+
+//DiscardEnergy :)
+func DiscardEnergy(Ec EnergyCost, cant int, Type Element) EnergyCost { return EnergyCost{} }
+
+/*
+laycra company
+	fibras artificiales para textiles
+
+presencia global
+	asia & lat america
+
+	San Pedro - santa catarina - la fama
+	facultad plan empresa?
+	gerente area TI
+
+	6 meses
+	no posibilidad de estadia (al momento)
+
+	$5200 mes
+	caintra
+*/

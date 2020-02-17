@@ -1,0 +1,101 @@
+[
+  {
+    "id": "base1-1",
+    "name": "Alakazam",
+    "imageUrl": "https://images.pokemontcg.io/base1/1.png",
+    "subtype": "Stage 2",
+    "supertype": "Pokémon",
+    "level": "42",
+    "evolvesFrom": "Kadabra",
+    "ability": {
+      "name": "Damage Swap",
+      "text": "As often as you like during your turn (before your attack), you may move 1 damage counter from 1 of your Pokémon to another as long as you don't Knock Out that Pokémon. This power can't be used if Alakazam is Asleep, Confused, or Paralyzed.",
+      "type": "Pokémon Power"
+    },
+    "hp": "80",
+    "retreatCost": [
+      "Colorless",
+      "Colorless",
+      "Colorless"
+    ],
+    "convertedRetreatCost": 3,
+    "number": "1",
+    "artist": "Ken Sugimori",
+    "rarity": "Rare",
+    "series": "Base",
+    "set": "Base",
+    "setCode": "base1",
+    "types": [
+      "Psychic"
+    ],
+    "attacks": [
+      {
+        "name": "Confuse Ray",
+        "cost": [
+          "Psychic",
+          "Psychic",
+          "Psychic"
+        ],
+        "convertedEnergyCost": 3,
+        "damage": "30",
+        "text": "Flip a coin. If heads, defender is now Confused."
+      }
+    ],
+    "weaknesses": [
+      {
+        "type": "Psychic",
+        "value": "×2"
+      }
+    ],
+    "imageUrlHiRes": "https://images.pokemontcg.io/base1/1_hires.png",
+    "nationalPokedexNumber": 65
+  },
+  {
+    "id": "base1-95",
+    "name": "Switch",
+    "imageUrl": "https://images.pokemontcg.io/base1/95.png",
+    "subtype": "",
+    "supertype": "Trainer",
+    "number": 95,
+    "artist": "Keiji Kinebuchi",
+    "rarity": 10,
+    "series": "Base",
+    "set": "Base",
+    "setCode": "base1",
+    "text": [
+      "Switch 1 of your Benched Pokémon with your Active Pokémon."
+    ],
+    "imageUrlHiRes": "https://images.pokemontcg.io/base1/95_hires.png"
+  },
+  {
+    "id": "base1-96",
+    "name": "Double Colorless Energy",
+    "imageUrl": "https://images.pokemontcg.io/base1/96.png",
+    "subtype": "Special",
+    "supertype": "Energy",
+    "number": 96,
+    "artist": "Keiji Kinebuchi",
+    "rarity": 11,
+    "series": "Base",
+    "set": "Base",
+    "setCode": "base1",
+    "text": [
+      "Provides energy. Doesn't count as a basic energy card."
+    ],
+    "imageUrlHiRes": "https://images.pokemontcg.io/base1/96_hires.png"
+  },
+  {
+    "id": "base1-97",
+    "name": "Fighting Energy",
+    "imageUrl": "https://images.pokemontcg.io/base1/97.png",
+    "subtype": "Basic",
+    "supertype": "Energy",
+    "number": 97,
+    "artist": "Keiji Kinebuchi",
+    "rarity": 10,
+    "series": "Base",
+    "set": "Base",
+    "setCode": "base1",
+    "imageUrlHiRes": "https://images.pokemontcg.io/base1/97_hires.png"
+  }
+]
