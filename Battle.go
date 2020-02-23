@@ -23,8 +23,9 @@ type Player struct {
 
 //Side is the field side of the player
 type Side struct {
-	Main  *CardPokemon
-	Bench [5]*CardPokemon
+	Main      *CardPokemon
+	Bench     [5]*CardPokemon
+	CanEvolve [6]bool
 }
 
 //Field is the total play area, both sides
@@ -65,7 +66,6 @@ func Battle(Pl1 string, Pl2 string) {
 	Adversary = Player2
 	Player1.side = BattleField.Player1
 	Player2.side = BattleField.Player2
-
 }
 
 //Init is the player initializer in the game
@@ -103,6 +103,43 @@ func (p *Player) GetHand() {
 		log.Println("No Basic Pokemon")
 		a, b = b, b+5
 	}
+}
+
+//BattleTest is the thest of battle functions
+func BattleTest() {
+	var def CardPokemon
+	var att CardPokemon
+	pokeside := FlipCoin()
+	if pokeside {
+		def = Sets["Base"]["base1-1"].(CardPokemon)
+		att = Sets["Base"]["base1-3"].(CardPokemon)
+	} else {
+		def = Sets["Base"]["base1-3"].(CardPokemon)
+		att = Sets["Base"]["base1-1"].(CardPokemon)
+	}
+	drawSetPokemon(win, def, "P2-Main")
+	drawSetPokemon(win, att, "P1-Main")
+	/*
+	 */
+}
+
+func playerTurn() {
+	var Energyused, Attacked  = false, false
+	//var PlacePokemon int
+	//var Evolvepokemon int
+	//var Reemplace int
+	for !Attacked {
+
+	}
+
+}
+
+//EvolvePokemon evolves a pokemon to the next stage
+func (P *CardPokemon) EvolvePokemon(EP *CardPokemon) {
+	if EP.Preevolution == P.Title {
+		EP.Hp -= (P.MaxHp - P.Hp)
+	}
+
 }
 
 /*

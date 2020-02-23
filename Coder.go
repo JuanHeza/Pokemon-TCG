@@ -3,6 +3,7 @@ package main
 import (
 	"bytes"
 	"encoding/json"
+	"fmt"
 	"log"
 	"os"
 )
@@ -13,10 +14,14 @@ var (
 	pokemon = []CardPokemon{}
 	trainer = []CardTrainer{}
 	energy  = []CardEnergy{}
+	//Sets store the info of each set the first index is the set and the second the ID of the card
+	Sets = map[string](map[string]interface{}){}
 )
 
 //Decode the data from a csv
 func Decode(file string) {
+	var card interface{}
+
 	log.Println("Decode")
 	dat, err := os.Open(file)
 	if err != nil {
@@ -37,21 +42,31 @@ func Decode(file string) {
 	}
 	*/
 	for _, carta := range v {
+		_, ok := Sets[fmt.Sprintf("%s", carta["set"])]
+		if !ok {
+			Sets[fmt.Sprintf("%s", carta["set"])] = make(map[string]interface{})
+		}
 		switch carta["supertype"] {
 		case "Energy":
-			log.Println("Energy") //, carta)
+			//log.Println("Energy") //, carta)
+			card = newEnergyCard(carta)
+			Sets[card.(CardEnergy).Set][card.(CardEnergy).ID] = card
 			break
 		case "Trainer":
-			log.Println("Trainer") //, carta)
+			//log.Println("Trainer") //, carta)
+			card = newTrainerCard(carta)
+			Sets[card.(CardTrainer).Set][card.(CardTrainer).ID] = card
 			break
 		case "Pokémon":
-			log.Println("Pokemon") //, carta)
-			newPokemonCard(carta)
+			//log.Println("Pokemon") //, carta)
+			card = newPokemonCard(carta)
+			Sets[card.(CardPokemon).Set][card.(CardPokemon).ID] = card
 			break
 		default:
 			log.Println("Error", carta)
 			break
 		}
+		//log.Println(card)
 	}
 }
 

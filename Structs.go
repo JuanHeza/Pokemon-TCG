@@ -142,23 +142,42 @@ type CardPokemon struct {
 	Resistence EnergyCost `json:"resistence,omitempty"`
 	StatDamage status     `json:"stat_damage,omitempty"` // burned, poison & super poison
 	StatMove   status     `json:"stat_move,omitempty"`   // paralyzed,sleep & confused
-	Pokedex    float64    `json:"nationalPokedexNumber,omitempty"`
+	Pokedex    int        `json:"nationalPokedexNumber,omitempty"`
+	Preevolution string	  `json:"evolvesFrom,omitempty"`
 }
 
 //CardEnergy stores the data of a energy type card
 type CardEnergy struct {
 	CardBase
 	Energy      EnergyCost
-	SubType     string //special or basic
-	Description string
+	Extra       string
+	SubType     string `json:"sub_type,omitempty"` //special or basic
+	Description string `json:"description,omitempty"`
 }
 
 //CardTrainer stores the data of a trainer type card
 type CardTrainer struct {
 	CardBase
-	SubType     string //special or basic
-	Description string
+	SubType     string `json:"sub_type,omitempty"` //special or basic
+	Description string `json:"description,omitempty"`
 	//Efects			map[string]Efect
+}
+
+func (PC *CardPokemon) printCard() {
+	fmt.Println(PC)
+}
+
+func (TC *CardTrainer) printCard() {
+	fmt.Println(TC)
+}
+
+func (EC *CardEnergy) printCard() {
+	fmt.Println(EC)
+}
+
+//CardInterface is an interface for the 3 types of cards
+type CardInterface interface {
+	printCard()
 }
 
 //FlipCoin Flips a coin to get a value (Head = true | Tail = False)
@@ -185,20 +204,29 @@ var AttackMap = map[string](Attk){}
 //AttackMap[att].(field,Params)
 
 //newPokemonCard Creates a new card using a map of interfaces
-func newPokemonCard(dats map[string]interface{}) {
+func newPokemonCard(dats map[string]interface{}) CardPokemon {
 	hp, err := strconv.Atoi(fmt.Sprintf("%s", dats["hp"]))
+	if err != nil {
+		log.Println(err)
+	}
+	num, err := strconv.Atoi(fmt.Sprintf("%s", dats["number"]))
+	if err != nil {
+		log.Println(err)
+	}
+	Pdex, err := strconv.ParseFloat(fmt.Sprintf("%f", dats["nationalPokedexNumber"]), 64)
 	if err != nil {
 		log.Println(err)
 	}
 	var P = CardPokemon{
 		CardBase: CardBase{
-			ID:       fmt.Sprintf("%s", dats["id"]),
-			Title:    fmt.Sprintf("%s", dats["name"]),
-			Series:   fmt.Sprintf("%s", dats["series"]),
-			Set:      fmt.Sprintf("%s", dats["set"]),
-			Setcode:  fmt.Sprintf("%s", dats["setCode"]),
-			Rarity:   Rarities[fmt.Sprintf("%s", dats["rarity"])],
-			CardType: fmt.Sprintf("%s", dats["supertype"]),
+			ID:        fmt.Sprintf("%s", dats["id"]),
+			Title:     fmt.Sprintf("%s", dats["name"]),
+			Series:    fmt.Sprintf("%s", dats["series"]),
+			Set:       fmt.Sprintf("%s", dats["set"]),
+			Setcode:   fmt.Sprintf("%s", dats["setCode"]),
+			Rarity:    Rarities[fmt.Sprintf("%s", dats["rarity"])],
+			CardType:  fmt.Sprintf("%s", dats["supertype"]),
+			SetNumber: num,
 		},
 		Hp:         hp,
 		MaxHp:      hp,
@@ -209,19 +237,19 @@ func newPokemonCard(dats map[string]interface{}) {
 		Resistence: newEnergyCost(dats["resistances"], 1),
 		StatDamage: Normal,
 		StatMove:   Normal,
+		Pokedex:    int(Pdex),
 	}
-	P.SetNumber, err = strconv.Atoi(fmt.Sprintf("%s", dats["number"]))
-	if err != nil {
-		log.Println(err)
-	}
+
 	if reflect.ValueOf(dats["types"]).Len() != 1 {
 		log.Fatal()
 	}
 	P.Type = Elements[fmt.Sprintf("%s", reflect.ValueOf(dats["types"]).Index(0))]
-	P.Pokedex, err = strconv.ParseFloat(fmt.Sprintf("%f", dats["nationalPokedexNumber"]), 64)
-	if err != nil {
-		log.Println(err)
+
+	ev, ok := dats["evolvesFrom"]
+	if ok{
+		P.Preevolution = fmt.Sprintf("%s", ev)
 	}
+
 	ab, ok := dats["ability"]
 	if !ok {
 		log.Println("No Ability")
@@ -231,7 +259,7 @@ func newPokemonCard(dats map[string]interface{}) {
 		log.Println("No Attacks")
 	}
 	P.Slot1, P.Slot2 = newAttacks(at, ab)
-	log.Println((P))
+	return P
 }
 
 func newEnergyCost(in interface{}, val int) EnergyCost {
@@ -271,7 +299,7 @@ func newEnergyCost(in interface{}, val int) EnergyCost {
 
 func newAttacks(at interface{}, ab ...interface{}) (Attacks, Attacks) {
 	var slot1, slot2 = Attacks{}, Attacks{}
-	if len(ab) != 0 {
+	if ab[0] != nil {
 		Y := reflect.ValueOf(ab).Index(0).Interface().(map[string]interface{})
 		slot1 = Attacks{
 			Name:        fmt.Sprintf("%s", Y["name"]),
@@ -280,83 +308,93 @@ func newAttacks(at interface{}, ab ...interface{}) (Attacks, Attacks) {
 			Active:      true,
 			//Do:,
 		}
-
 		l := reflect.ValueOf(at).Index(0).Interface().(map[string]interface{})
-		slot2 = Attacks{
-			Name:        fmt.Sprintf("%s", l["name"]),
-			Description: fmt.Sprintf("%s", l["text"]),
-			Ability:     false,
-			Active:      true,
-		}
-
-		P, err := strconv.Atoi(fmt.Sprintf("%s", l["damage"]))
-		if err != nil {
-			log.Println(err)
-		}
-		slot2.Params = append(slot2.Params, P)
-
-		ln := reflect.ValueOf(l["cost"]).Len()
-		var mp = make(map[Element]int)
-		for i := 0; i < ln; i++ {
-			in := reflect.ValueOf(l["cost"]).Index(i)
-			mp[Elements[fmt.Sprintf("%s", in)]]++
-		}
-		slot2.Cost = EnergyCost{
-			Cost: mp,
-		}
+		slot2 = slotFillingAttack(l)
 	} else {
-		log.Println("No Ability")
 		l := reflect.ValueOf(at).Index(0).Interface().(map[string]interface{})
-		slot1 = Attacks{
-			Name:        fmt.Sprintf("%s", l["name"]),
-			Description: fmt.Sprintf("%s", l["text"]),
-			Ability:     false,
-			Active:      true,
-		}
-
-		P, err := strconv.Atoi(fmt.Sprintf("%s", l["damage"]))
-		if err != nil {
-			log.Println(err)
-		}
-		slot1.Params = append(slot2.Params, P)
-
-		ln := reflect.ValueOf(l["cost"]).Len()
-		var mp = make(map[Element]int)
-		for i := 0; i < ln; i++ {
-			in := reflect.ValueOf(l["cost"]).Index(i)
-			mp[Elements[fmt.Sprintf("%s", in)]]++
-		}
-		slot1.Cost = EnergyCost{
-			Cost: mp,
-		}
+		slot1 = slotFillingAttack(l)
 		if reflect.ValueOf(at).Len() > 1 {
 			l := reflect.ValueOf(at).Index(0).Interface().(map[string]interface{})
-			slot2 = Attacks{
-				Name:        fmt.Sprintf("%s", l["name"]),
-				Description: fmt.Sprintf("%s", l["text"]),
-				Ability:     false,
-				Active:      true,
-			}
-
-			P, err := strconv.Atoi(fmt.Sprintf("%s", l["damage"]))
-			if err != nil {
-				log.Println(err)
-			}
-			slot2.Params = append(slot2.Params, P)
-
-			ln := reflect.ValueOf(l["cost"]).Len()
-			var mp = make(map[Element]int)
-			for i := 0; i < ln; i++ {
-				in := reflect.ValueOf(l["cost"]).Index(i)
-				mp[Elements[fmt.Sprintf("%s", in)]]++
-			}
-			slot2.Cost = EnergyCost{
-				Cost: mp,
-			}
+			slot2 = slotFillingAttack(l)
 		}
 
 	}
 	return slot1, slot2
+}
+
+func slotFillingAttack(l map[string]interface{}) Attacks {
+	var slot = Attacks{
+		Name:        fmt.Sprintf("%s", l["name"]),
+		Description: fmt.Sprintf("%s", l["text"]),
+		Ability:     false,
+		Active:      true,
+	}
+
+	is := fmt.Sprintf("%s", l["damage"])
+	if is != "" {
+		P, err := strconv.Atoi(is)
+		slot.Params = append(slot.Params, P)
+		if err != nil {
+			log.Println(err)
+		}
+	}
+
+	ln := reflect.ValueOf(l["cost"]).Len()
+	var mp = make(map[Element]int)
+	for i := 0; i < ln; i++ {
+		in := reflect.ValueOf(l["cost"]).Index(i)
+		mp[Elements[fmt.Sprintf("%s", in)]]++
+	}
+	slot.Cost = EnergyCost{
+		Cost: mp,
+	}
+	return slot
+}
+
+func newEnergyCard(dats map[string]interface{}) CardEnergy {
+	num, err := strconv.ParseFloat(fmt.Sprintf("%f", dats["number"]), 64)
+	if err != nil {
+		log.Println(err)
+	}
+	var E = CardEnergy{
+		CardBase: CardBase{
+			ID:        fmt.Sprintf("%s", dats["id"]),
+			Title:     fmt.Sprintf("%s", dats["name"]),
+			Series:    fmt.Sprintf("%s", dats["series"]),
+			Set:       fmt.Sprintf("%s", dats["set"]),
+			Setcode:   fmt.Sprintf("%s", dats["setCode"]),
+			Rarity:    Rarities[fmt.Sprintf("%s", dats["rarity"])],
+			CardType:  fmt.Sprintf("%s", dats["supertype"]),
+			SetNumber: int(num),
+		},
+		SubType: fmt.Sprintf("%s", dats["subtype"]),
+	}
+	if E.SubType != "Basic" {
+		E.Description = fmt.Sprintf("%s", dats["text"])
+	}
+	return E
+}
+
+func newTrainerCard(dats map[string]interface{}) CardTrainer {
+	num, err := strconv.ParseFloat(fmt.Sprintf("%f", dats["number"]), 64)
+	if err != nil {
+		log.Println(err)
+	}
+	var E = CardTrainer{
+		CardBase: CardBase{
+			ID:        fmt.Sprintf("%s", dats["id"]),
+			Title:     fmt.Sprintf("%s", dats["name"]),
+			Series:    fmt.Sprintf("%s", dats["series"]),
+			Set:       fmt.Sprintf("%s", dats["set"]),
+			Setcode:   fmt.Sprintf("%s", dats["setCode"]),
+			Rarity:    Rarities[fmt.Sprintf("%s", dats["rarity"])],
+			CardType:  fmt.Sprintf("%s", dats["supertype"]),
+			SetNumber: int(num),
+		},
+		Description: fmt.Sprintf("%s", dats["text"]),
+		SubType:     fmt.Sprintf("%s", dats["subtype"]),
+	}
+	return E
 }
 
 /*
