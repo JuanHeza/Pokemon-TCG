@@ -129,7 +129,9 @@ func playerTurn() {
 	//var Evolvepokemon int
 	//var Reemplace int
 	for !Attacked {
-
+		if Energyused{
+			
+		}
 	}
 
 }
